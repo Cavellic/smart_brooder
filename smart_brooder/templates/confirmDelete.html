@@ -1,0 +1,27 @@
+{%extends 'MainLayout.html'%} {%load static%} {% block content%}
+
+<section class="section dashboard">
+  <div class="row">
+    <div class="col-xxl-4 col-md-12">
+      <div class="card info-card sales-card">
+        <div class="container sales-card mt-5 text-white">
+          <h2>Are you sure you want to delete this entry?</h2>
+          <p><strong>Batch:</strong> {{ entry.batch }}</p>
+          <p><strong>Number of Chicks:</strong> {{ entry.number_of_chicks }}</p>
+          <p><strong>Date:</strong> {{ entry.date }}</p>
+
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a href="{% url 'chicks_management' %}" class="btn btn-secondary"
+              >Cancel</a
+            >
+            <!-- Replace 'chicks_list' with your actual list view URL -->
+          </form>
+        </div>
+
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</section>

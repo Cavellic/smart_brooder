@@ -1,0 +1,196 @@
+{%extends 'MainLayout.html'%} {%load static%} {% block content%}
+
+<style>
+  body {
+    background: #2e2f30;
+    margin-top: 20px;
+    font-size: 25px !important;
+  }
+  .widget {
+    background: #2f3335;
+    color: #efeff4;
+    margin-bottom: 0.75rem;
+    display: block;
+    position: relative;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1),
+      0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1),
+      0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12),
+      0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+  }
+  .widget .widget-header,
+  .widget-reminder-content,
+  .widget-reminder-time,
+  a.widget-header-title {
+    padding: 0.625rem;
+  }
+  .widget-chat-message:after,
+  .widget-chat-message:before,
+  .widget-reminder-container:after,
+  .widget-reminder-container:before {
+    display: table;
+    content: "";
+    clear: both;
+  }
+  .widget-footer.with-border,
+  .widget-reminder-container + .widget-reminder-container {
+    border-top: 1px solid #efeff4;
+  }
+  .widget-footer.with-bg,
+  .widget-header.with-bg {
+    background: #efeff4;
+  }
+  .widget-header.with-border {
+    border-bottom: 1px solid #607575;
+  }
+  .widget-reminder-header {
+    background: #71848f;
+    padding: 0.625rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #c1daf7;
+  }
+  .widget-reminder-container {
+    position: relative;
+  }
+  .inverse-mode .widget-reminder-container + .widget-reminder-container {
+    border-color: #333;
+  }
+  .inverse-mode .widget-reminder-header {
+    background: #212121;
+  }
+  .widget-reminder-time {
+    width: 5rem;
+    float: left;
+    text-align: right;
+    font-size: 0.625rem;
+  }
+  .widget-reminder-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 5.5rem;
+    width: 0.125rem;
+    background: #6f7b80;
+  }
+  .widget-reminder-content {
+    margin-left: 5.125rem;
+  }
+  .widget-header-title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 500;
+  }
+  .widget .widget-title,
+  .widget .widget-title a {
+    font-size: 1rem;
+    color: #efeff4;
+    line-height: 1rem;
+  }
+  .widget .widget-title {
+    font-weight: 600;
+    margin: 0;
+  }
+  .widget-desc,
+  .widget-desc a {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #1d1d1f;
+    font-weight: 500;
+  }
+  .img-circle {
+    border-radius: 50%;
+  }
+
+  .pull-left {
+    float: left !important;
+  }
+  .pull-right {
+    float: right !important;
+  }
+  .m-t-15 {
+    margin-top: 15px !important;
+  }
+
+  .m-r-5 {
+    margin-right: 5px !important;
+  }
+
+  .widget .widget-header,
+  .widget-reminder-content,
+  .widget-reminder-time,
+  a.widget-header-title {
+    padding: 0.625rem;
+  }
+</style>
+
+<link
+  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  rel="stylesheet"
+/>
+
+{% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+<div class="container"> 
+    <div class="card p-3">
+
+        <div class="col-lg-12">
+            <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h1>Egg Production</h1>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <h3>Eggs produced on daily basis</h3>
+                    <br>
+                    <form method="post">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        
+                        <input type="number" name="eggs_quantity" class="form-control" placeholder="Quantity" aria-describedby="emailHelp">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                  </div>
+                </div>
+              <h5 class="card-title">Report | Egg Production</h5>
+
+              <!-- Line Chart -->
+              <table style="background-color: #3e4d55; border-radius: 2px;" class="table table-striped table-hover">
+                <thead >
+                  <tr >
+                    <th style="background-color: #384349; color: #9ba0a7;" scope="col">Date</th>
+                    <th style="background-color: #313b41; color: #9ba0a7;" scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for eggs in eggs_produced %}
+                  <tr>
+                    <td style="background-color: #313b41; color: #9ba0a7;">{{eggs.date|date:'d-m-Y'}}</td>
+                    <td style="background-color: #313b41; color: #9ba0a7;">{{eggs.quantity}}</td>
+                    
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+              <!-- End Line Chart -->
+            </div>
+
+          </div>
+        </div>
+           
+    </div>
+ 
+</div>
+
+  {% endblock %}
+</div>

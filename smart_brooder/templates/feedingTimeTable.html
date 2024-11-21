@@ -1,0 +1,230 @@
+{%extends 'MainLayout.html'%} {%load static%} {% block content%}
+
+<style>
+  body {
+    background: #2e2f30;
+    margin-top: 20px;
+    font-size: 25px !important;
+  }
+  .widget {
+    background: #2f3335;
+    color: #efeff4;
+    margin-bottom: 0.75rem;
+    display: block;
+    position: relative;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1),
+      0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1),
+      0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12),
+      0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+  }
+  .widget .widget-header,
+  .widget-reminder-content,
+  .widget-reminder-time,
+  a.widget-header-title {
+    padding: 0.625rem;
+  }
+  .widget-chat-message:after,
+  .widget-chat-message:before,
+  .widget-reminder-container:after,
+  .widget-reminder-container:before {
+    display: table;
+    content: "";
+    clear: both;
+  }
+  .widget-footer.with-border,
+  .widget-reminder-container + .widget-reminder-container {
+    border-top: 1px solid #efeff4;
+  }
+  .widget-footer.with-bg,
+  .widget-header.with-bg {
+    background: #efeff4;
+  }
+  .widget-header.with-border {
+    border-bottom: 1px solid #607575;
+  }
+  .widget-reminder-header {
+    background: #71848f;
+    padding: 0.625rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #c1daf7;
+  }
+  .widget-reminder-container {
+    position: relative;
+  }
+  .inverse-mode .widget-reminder-container + .widget-reminder-container {
+    border-color: #333;
+  }
+  .inverse-mode .widget-reminder-header {
+    background: #212121;
+  }
+  .widget-reminder-time {
+    width: 5rem;
+    float: left;
+    text-align: right;
+    font-size: 0.625rem;
+  }
+  .widget-reminder-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 5.5rem;
+    width: 0.125rem;
+    background: #6f7b80;
+  }
+  .widget-reminder-content {
+    margin-left: 5.125rem;
+  }
+  .widget-header-title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 500;
+  }
+  .widget .widget-title,
+  .widget .widget-title a {
+    font-size: 1rem;
+    color: #efeff4;
+    line-height: 1rem;
+  }
+  .widget .widget-title {
+    font-weight: 600;
+    margin: 0;
+  }
+  .widget-desc,
+  .widget-desc a {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #1d1d1f;
+    font-weight: 500;
+  }
+  .img-circle {
+    border-radius: 50%;
+  }
+
+  .pull-left {
+    float: left !important;
+  }
+  .pull-right {
+    float: right !important;
+  }
+  .m-t-15 {
+    margin-top: 15px !important;
+  }
+
+  .m-r-5 {
+    margin-right: 5px !important;
+  }
+
+  .widget .widget-header,
+  .widget-reminder-content,
+  .widget-reminder-time,
+  a.widget-header-title {
+    padding: 0.625rem;
+  }
+</style>
+
+<link
+  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  rel="stylesheet"
+/>
+
+{% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+<section class="section dashboard">
+  <div class="row">
+    <div class="col-xxl-4 col-md-12">
+      <div class="card info-card sales-card">
+        <div class="container p-3">
+          {% if msg %}
+          <div
+            class="alert alert-warning alert-dismissible fade show"
+            role="alert"
+          >
+            <strong>{{msg}}</strong>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+          {% else %} {% endif %}
+          <div class="row">
+            <div class="row">
+              <div class="col-md-5">
+                <h3 class="text-white">Set up your time table</h3>
+                <form method="post">
+                  {% csrf_token %}
+                  <div style="font-size: 18px" class="form-group text-white">
+                    {{ form.date.label_tag }} {{ form.date }}
+                  </div>
+                  <div style="font-size: 18px" class="form-group text-white">
+                    {{ form.time.label_tag }} {{ form.time }}
+                  </div>
+                  <div style="font-size: 18px" class="form-group text-white">
+                    {{ form.description.label_tag }} {{ form.description }}
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-2">
+                    Submit
+                  </button>
+                </form>
+
+                <br />
+              </div>
+              <div class="col-md-7 text-white">
+                Feeding timetable
+                <br />
+                <br />
+                {% if time_tables %} {% else %}
+                <div class="alert alert-primary" role="alert">
+                  {{defaultMsg}}
+                </div>
+                {% endif %}
+
+                <div class="widget widget-reminder">
+                  {% for time_table in time_tables %}
+                  <div class="widget-reminder-header">{{time_table.date}}</div>
+                  <div class="widget-reminder-container">
+                    <div class="widget-reminder-time text-3">
+                      <h6 style='color: #fff'>{{time_table.time}}</h6>
+                    </div>
+                    <div class="widget-reminder-divider bg-success"></div>
+                    <div class="widget-reminder-content">
+                      <h3 class="widget-title">{{time_table.description}}</h3>
+
+                      <hr />
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br />
+            <br />
+            <div class="col-md-12"></div>
+          </div>
+
+          <script>
+            const sweetArray = "{{lsT}}";
+            //const sweeterArray = sweetArray.map(sweetItem => {
+            //return sweetItem
+            //})
+
+            console.log(sweetArray);
+          </script>
+
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

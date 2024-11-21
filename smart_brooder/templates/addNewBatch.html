@@ -1,0 +1,20 @@
+{%extends 'MainLayout.html'%} {%load static%} {% block content%}
+
+<section class="section dashboard">
+  <div class="row">
+    <div class="col-xxl-4 col-md-12">
+      <div class="card info-card sales-card">
+        <div class="container mt-5 text-white">
+          <h2>Add new batch</h2>
+          <form method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <!-- You can use form.as_table or form.as_ul for different layouts -->
+            <button type="submit" class="btn btn-primary">Create Batch</button>
+          </form>
+        </div>
+
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</section>

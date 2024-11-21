@@ -1,0 +1,350 @@
+{% extends "MainLayout.html" %} {% load static %} {% block content %}
+
+<style>
+  .batch-info:hover{
+    background-color: rgb(56, 70, 85);
+    
+  }
+</style>
+
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+<section class="section dashboard">
+  <div class="row">
+    <div class="col-xxl-4 col-md-12">
+      <div class="card info-card sales-card">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card-body">
+              <h5 class="card-title">Temperature <span>| Now</span></h5>
+
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-thermometer"></i>
+                </div>
+                <div class="ps-3">
+                  <h6 class='text-white'>{{current_temp}}°</h6>
+                  {% if current_temp > 20 and current_temp < 30 %}
+                  <span class="text-success small pt-1 fw-bold"
+                    >{{msg_normal}}</span
+                  >
+                  {% elif current_temp < 20 %}
+                  <span class="text-warning small pt-1 fw-bold"
+                    >{{msg_danger}}</span
+                  >
+                  {% else %}
+                  <span class="text-danger small pt-1 fw-bold"
+                    >{{msg_high}}</span
+                  >
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="card-body">
+              <h5 class="card-title">Humidity <span>| Now</span></h5>
+
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i style='color: rgb(17, 243, 17)' class="bi bi-moisture"></i>
+                </div>
+                <div class="ps-3">
+                  <h6 class='text-white'>{{current_humidity}}%</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Left side columns -->
+    <div class="col-lg-12">
+      <div class="row">
+        <!-- Sales Card -->
+        {% for batch in batches %}
+        <div class="col-xxl-4 col-md-6">
+          {% if batch.get_days_difference > 50 %}
+
+          {% else %}
+
+          <a href="{% url 'batch_info' batch.id %}">
+            <div class="card info-card sales-card batch-info">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      {{batch.batch}}
+                      <span
+                        >| {{batch.date}} &nbsp;|&nbsp;&nbsp;
+                        <span
+                          style="font-size: 15px !important"
+                          class="card-title"
+                          >{{batch.get_days_difference}} days old</span
+                        ></span
+                      >
+                    </h5>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <p
+                    
+                      {% if batch.get_days_difference > 1 and batch.get_days_difference < 3 %}
+                              {% if current_temp >= 32 and current_temp <= 38 %}
+                              <p>
+                                  <ol>
+                                      <li>
+                                          Great job! Your brooder temperature is perfect for your chicks first few days. This range will help them stay warm, comfortable, and support their initial growth.
+                                      </li>
+                                  </ol>
+                              </p>
+          
+                              {% elif current_temp < 32 %}
+                              <ol>
+                                  <li>Increase brooder temperature: Use additional heat sources (e.g., heat lamps, heat mats) to raise temperature to 90-100°F (32-38°C).</li>
+                                  <li>Ensure adequate ventilation: Maintain proper airflow to prevent moisture buildup.</li>
+                                  <li>Monitor chicks closely: Watch for signs of distress, hypothermia, or cold stress.</li>
+                              </ol>
+                              
+                              {% else %}
+                              <ol>
+                                  <li> Reduce temperature: Lower heat sources or increase ventilation to bring temperature within optimal range (32-38°C / 90-100°F).</li>
+                                  <li> Provide shade: Ensure chicks have access to shaded areas.</li>
+                                  <li>Increase ventilation: Improve airflow to prevent heat buildup.</li>
+                                  <li>Monitor chicks closely: Watch for signs of heat stress.</li>
+                              </ol>
+  
+                              {% endif %}
+  
+                      {% elif batch.get_days_difference >= 4 and batch.get_days_difference <= 7 %}
+                                  {% if current_temp >= 29 and current_temp <= 35 %}
+                                  <ol>
+                                      <li>Your brooder temperature is perfect for 4-7 day-old chicks!</li>
+                                      <li>Chicks are comfortable and thriving in this temperature range.</li>
+                                      <li>Good job maintaining an ideal environment!</li>
+                                  </ol>
+                                  {% elif current_temp < 29 %}
+                                  <ol>
+                                      <li>Temperature is too low! Increase heat to 29-35°C (85-95°F) for optimal growth.</li>
+                                      <li>Chicks may experience discomfort and stress below 29°C.</li>
+                                      <li>Raise temperature to prevent hypothermia and health issues.</li>
+                                  </ol>
+                                  {% else %}
+                                  <ol>
+                                      <li>Temperature is too high! Reduce heat to 29-35°C (85-95°F) for optimal growth.</li>
+                                      <li>Chicks may experience heat stress above 35°C.</li>
+                                      <li>Lower temperature to prevent dehydration and health issues.</li>
+                                  </ol>
+                                  {% endif %}
+  
+                      
+                      {% elif batch.get_days_difference >= 7 and batch.get_days_difference <= 14 %}
+                                  {% if current_temp >= 27 and current_temp <= 32 %}
+                                  <ol>
+                                      <li>Your brooder temperature is perfect for 7-14 day-old chicks!</li>
+                                      <li>Chicks are comfortable and thriving in this temperature range.</li>
+                                      <li>Good job maintaining an ideal environment!</li>
+                                  </ol>
+                                  {% elif current_temp < 27 %}
+                                  <ol>
+                                      <li>Temperature is too low! Increase heat to 27-32°C 80-90°F for optimal growth.</li>
+                                      <li>Chicks may experience discomfort and stress below 27°C.</li>
+                                      <li>Raise temperature to prevent hypothermia and health issues.</li>
+                                  </ol>
+                                  {% else %}
+                                  <ol>
+                                      <li>Temperature is too high! Reduce heat to 27-32°C (80-90°F) for optimal growth.</li>
+                                      <li>Chicks may experience heat stress above 32°C.</li>
+                                      <li>Lower temperature to prevent dehydration and health issues.</li>
+                                  </ol>
+                                  {% endif %}
+  
+                                  
+                                  
+                      {% elif batch.get_days_difference >= 14 and batch.get_days_difference <= 21 %}
+                                  {% if current_temp >= 24 and current_temp <= 29 %}
+                                  <ol>
+                                      <li>Your brooder temperature is perfect for 14-21 day-old chicks!</li>
+                                      <li>Chicks are comfortable and thriving in this temperature range.</li>
+                                      <li>Good job maintaining an ideal environment!</li>
+                                  </ol>
+                                  {% elif current_temp < 24 %}
+                                  <ol>
+                                      <li>Temperature is too low! Increase heat to 24-29°C (75-85°F) for optimal growth.</li>
+                                      <li>Chicks may experience discomfort and stress below 24°C.</li>
+                                      <li>Raise temperature to prevent hypothermia and health issues.</li>
+                                  </ol>
+                                  {% else %}
+                                  <ol>
+                                      <li>Temperature is too high! Reduce heat to 24-29°C (75-85°F) for optimal growth.</li>
+                                      <li>Chicks may experience heat stress above 29°C.</li>
+                                      <li>Lower temperature to prevent dehydration and health issues.</li>
+                                  </ol>
+                                  {% endif %}
+  
+  
+                                  
+                      {% elif batch.get_days_difference >= 21 and batch.get_days_difference <= 28 %}
+                                  {% if current_temp >= 21 and current_temp <= 27 %}
+                                  <ol>
+                                      <li>Your brooder temperature is perfect for 21-28 day-old chicks!</li>
+                                      <li>Chicks are comfortable and thriving in this temperature range.</li>
+                                      <li>Good job maintaining an ideal environment!</li>
+                                  </ol>
+                                  {% elif current_temp < 21 %}
+                                  <ol>
+                                      <li>Temperature is too low! Increase heat to 21-27°C (70-80°F) for optimal growth.</li>
+                                      <li>Chicks may experience discomfort and stress below 21°C.</li>
+                                      <li>Raise temperature to prevent hypothermia and health issues.</li>
+                                  </ol>
+                                  {% else %}
+                                  <ol>
+                                      <li>Temperature is too high! Reduce heat to 24-29°C (70-80°F) for optimal growth.</li>
+                                      <li>Chicks may experience heat stress above 27°C.</li>
+                                      <li>Lower temperature to prevent dehydration and health issues.</li>
+                                  </ol>
+                                  {% endif %}
+  
+  
+                      {% else%}
+                                  {% if current_temp >= 18 and current_temp <= 24 %}
+                                  <ol>
+                                      <li>Your brooder temperature is perfect for old chicks ready for market.</li>
+                                      <li>Chicks are comfortable and thriving in this temperature range.</li>
+                                      <li>Good job maintaining an ideal environment!</li>
+                                  </ol>
+                                  {% elif current_temp < 18 %}
+                                  <ol>
+                                      <li>Temperature is too low! Increase heat to 18-24°C (65-75°F) for optimal growth.</li>
+                                      <li>Chicks may experience discomfort and stress below 18°C.</li>
+                                      <li>Raise temperature to prevent hypothermia and health issues.</li>
+                                  </ol>
+                                  {% else %}
+                                  <ol>
+                                      <li>Temperature is too high! Reduce heat to 18-24°C (65-75°F) for optimal growth.</li>
+                                      <li>Chicks may experience heat stress above 24°C.</li>
+                                      <li>Lower temperature to prevent dehydration and health issues.</li>
+                                  </ol>
+                                  {% endif %}
+                      {% endif %}
+  
+                  </p>
+                  <hr />
+                  <p class="p-2">
+                   
+                      {% if batch.get_days_difference > 1 and batch.get_days_difference < 7 %}
+  
+                          {% if current_humidity >= 50 and current_humidity <= 60 %}
+                          <ol>
+                              <li>Humidity level is perfect for 1 week-old chicks!</li>
+                              <li>Chicks are comfortable and thriving in this humidity range.</li>
+                              <li>Good job maintaining an ideal environment</li>
+                          </ol>
+  
+                          {% elif current_humidity > 60 %}
+                          <ol>
+                              <li>Humidity level is too high for 1 week-old chicks. Reduce humidity to 50-60%</li>
+                              <li>Excess moisture may lead to respiratory issues and disease.</li>
+                              <li>Improve ventilation and reduce humidity ASAP.</li>
+                          </ol>
+  
+                          {% else %}
+                          <ol>
+                              <li>Humidity level is too low for 1 week-old chicks. Increase humidity to 50-60%.</li>
+                              <li>Low humidity may cause dehydration and respiratory issues.</li>
+                              <li>Add moisture to prevent health problems.</li>
+                              
+                          </ol>
+                          
+                          {% endif %}
+  
+                      {% elif batch.get_days_difference >= 14 and batch.get_days_difference <= 28 %}
+                          {% if current_humidity >= 40 and current_humidity <= 50 %}
+                          <ol>
+                              <li>Humidity level is perfect for 2-4 week-old chicks!</li>
+                              <li>Chicks are comfortable and thriving in this humidity range.</li>
+                              <li>Good job maintaining an ideal environment</li>
+                          </ol>
+  
+                          {% elif current_humidity > 50 %}
+                          <ol>
+                              <li>Humidity level is too high for 2-4 week-old chicks. Reduce humidity to 40-50%</li>
+                              <li>Excess moisture may lead to respiratory issues and disease.</li>
+                              <li>Improve ventilation and reduce humidity ASAP.</li>
+                          </ol>
+  
+                          {% else %}
+                          <ol>
+                              <li>Humidity level is too low for 2-4 week-old chicks. Increase humidity to 40-50%.</li>
+                              <li>Low humidity may cause dehydration and respiratory issues.</li>
+                              <li>Add moisture to prevent health problems.</li>
+                              
+                          </ol>
+                          
+                          {% endif %}
+                      {% else %}
+                          {% if current_humidity >= 30 and current_humidity <= 40 %}
+                          <ol>
+                              <li>Humidity level is perfect for 5-6 week-old chicks!</li>
+                              <li>Chicks are comfortable and thriving in this humidity range.</li>
+                              <li>Good job maintaining an ideal environment</li>
+                          </ol>
+  
+                          {% elif current_humidity > 40 %}
+                          <ol>
+                              <li>Humidity level is too high for 4-6 week-old chicks. Reduce humidity to 30-40%</li>
+                              <li>Excess moisture may lead to respiratory issues and disease.</li>
+                              <li>Improve ventilation and reduce humidity ASAP.</li>
+                          </ol>
+  
+                          {% else %}
+                          <ol>
+                              <li>Humidity level is too low for 4-6 week-old chicks. Increase humidity to 30-40%.</li>
+                              <li>Low humidity may cause dehydration and respiratory issues.</li>
+                              <li>Add moisture to prevent health problems.</li>
+                              
+                          </ol>
+                          
+                          {% endif %}
+  
+                      {% endif %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          {% endif %}
+        </div>
+        {% endfor %}
+        <!-- End Sales Card -->
+
+        <script>
+          const sweetArray = [2, 3, 4, 5, 35];
+          const sweeterArray = sweetArray.map((sweetItem) => {
+            return sweetItem * 2;
+          });
+
+          console.log(sweeterArray);
+        </script>
+      </div>
+    </div>
+    <!-- End Left side columns -->
+  </div>
+</section>
+
+{% endblock %}

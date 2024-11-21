@@ -1,0 +1,182 @@
+{% extends 'MainLayout.html' %} {% load static %} {% block content %}
+
+<div class="pagetitle">
+  <h1>Dashboard</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+      <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+  </nav>
+</div>
+<!-- End Page Title -->
+
+<section class="section dashboard">
+  <div class="row">
+    <!-- Left side columns -->
+    <div class="col-lg-12">
+      <div class="row">
+        <!-- Sales Card -->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card info-card sales-card">
+            <div class="card-body">
+              <h5 class="card-title">Temperature <span>| Now</span></h5>
+
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-thermometer"></i>
+                </div>
+                <div class="ps-3">
+                  <h6 style="color: #f6f9ff;">{{current_temp}}°</h6>
+                  {% if current_temp > 20 and current_temp < 30 %}
+                  <span style="color: rgb(14, 175, 14)" class="small pt-1 fw-bold"
+                    >{{msg_normal}}</span
+                  >
+                  {% elif current_temp < 20 %}
+                  <span class="text-warning small pt-1 fw-bold"
+                    >{{msg_danger}}</span
+                  >
+                  {% else %}
+                  <span class="text-danger small pt-1 fw-bold"
+                    >{{msg_high}}</span
+                  >
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Sales Card -->
+
+        <!-- Revenue Card -->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card info-card revenue-card">
+            <div class="card-body">
+              <h5 class="card-title">Humidity <span>| Now</span></h5>
+
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-moisture"></i>
+                </div>
+                <div class="ps-3">
+                  <h6 style="color: #f6f9ff;">{{current_humidity}}%</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Revenue Card -->
+
+        <!-- Customers Card -->
+        <div class="col-xxl-4 col-xl-12">
+          <div class="card info-card customers-card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"
+                ><i class="bi bi-three-dots"></i
+              ></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    Total Eggs <span>| This Month</span>
+                  </h5>
+
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                    >
+                      <i class="bi bi-egg"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 style="color: #f6f9ff;">{{total_quantity}}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Eggs | Report</h5>
+  
+                <!-- Line Chart -->
+                <canvas id="lineChart" style="max-height: 400px; color: #ffffff;"></canvas>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    
+    new Chart(document.querySelector('#lineChart'), {
+      
+      type: 'line',
+      data: {
+        labels: [{% for eggs in eggs_produced %}{% if eggs.get_days_difference > 2 %} {% else %}"{{eggs.date|date:'d-m-Y'}}",{% endif %} {% endfor %}],
+        fillColor: "rgba(255, 89, 114, 0.6)",
+        datasets: [{
+          label: 'Eggs | Quantity',
+          data: [{% for eggs in eggs_produced %}{% if eggs.get_days_difference > 2 %} {% else %}"{{eggs.quantity}}", {% endif %}{% endfor %}],
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            ticks: {
+              color: 'white' // Set x-axis label color to white
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: 'white' // Set y-axis label color to white
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white' // Set legend label color to white
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+
+                
+                <!-- End Line CHart -->
+  
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- End Customers Card -->
+
+        <!-- Reports -->
+        
+      </div>
+    </div>
+    <!-- End Left side columns -->
+  </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'layouts/links.html' %}
+    
+    <title>Smart Brooder</title>
+</head>
+<body> 
+    {% include 'layouts/topbar.html' %}
+    {% include 'layouts/sidebar.html' %}
+    <main class="main" id="main">
+        {% block content %} 
+
+
+        {% endblock %}
+    </main>
+    {% include 'layouts/scripts.html' %}
+    
+</body>
+</html>

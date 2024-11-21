@@ -1,0 +1,11 @@
+{%extends 'MainLayout.html'%} {%load static%} {% block content%}
+
+<div class="container mt-5 text-white">
+    <h2>Update Batch Record</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- You can use form.as_table or form.as_ul for different layouts -->
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+{% endblock %}
